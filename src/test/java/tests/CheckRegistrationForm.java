@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 
 public class CheckRegistrationForm extends TestBase{
+    private final String BASE_URL = System.getProperty("base.url");
 
     Faker faker = new Faker();
 
@@ -31,7 +32,7 @@ public class CheckRegistrationForm extends TestBase{
     @Test
     void successfulFillFormTest() {
         step("Open students registration form", () -> {
-            open("https://demoqa.com/automation-practice-form");
+            open(BASE_URL);
             $(".practice-form-wrapper").shouldHave(text("Student Registration Form"));
         });
 
