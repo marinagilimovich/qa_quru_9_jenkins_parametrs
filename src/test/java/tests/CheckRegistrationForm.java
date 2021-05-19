@@ -10,6 +10,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 
 public class CheckRegistrationForm extends TestBase{
+
     private final String BASE_URL = System.getProperty("base.url");
 
     Faker faker = new Faker();
