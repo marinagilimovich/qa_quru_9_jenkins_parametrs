@@ -18,32 +18,37 @@ public class TestBase {
 
     @BeforeAll
     static void setup() {
-        Configuration.startMaximized = true;
         addListener("AllureSelenide", new AllureSelenide());
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability("enableVNC", true);
         capabilities.setCapability("enableVideo", true);
         Configuration.browserCapabilities = capabilities;
 
-//        gradle clean test
-//        gradle clean test -Dbrowser=firefox
-        Configuration.browser = System.getProperty("browser", "chrome");
+//        gradle clean test -Dweb.browser=opera
+        Configuration.browser = System.getProperty("web.browser", "chrome");
 
 //        gradle clean test
 //        gradle clean test -Dremote.web.driver="https://user1:1234@selenoid.autotests.cloud/wd/hub/"
 //        gradle clean test -Dremote.web.driver="https://%s:%s@selenoid.autotests.cloud/wd/hub/"
 
+        /*
+        "https://%s:%s@selenoid.autotests.cloud/wd/hub/"
+        String.format("https://%s:%s@selenoid.autotests.cloud/wd/hub/", "hello", "world")
+            ->
+            "https://hello:world@selenoid.autotests.cloud/wd/hub/"
+         */
+
         String remoteWebDriver = System.getProperty("remote.web.driver");
 
-        if (remoteWebDriver != null) {
+        if(remoteWebDriver != null) {
             String user = driverConfig.remoteWebUser();
             String password = driverConfig.remoteWebPassword();
             Configuration.remote = String.format(remoteWebDriver, user, password);
 
-            System.out.println("User: " + user);
-            System.out.println("Password: " + password);
-            System.out.println("Remote web driver: " + remoteWebDriver);
-            System.out.println("Configuration remote: " + String.format(remoteWebDriver, user, password));
+            System.out.println(user);
+            System.out.println(password);
+            System.out.println(remoteWebDriver);
+            System.out.println(String.format(remoteWebDriver, user, password));
         }
     }
 
@@ -53,12 +58,10 @@ public class TestBase {
         attachPageSource();
         attachAsText("Browser console logs", getConsoleLogs());
 
-//      gradle clean test -Dremote.web.driver="https://user1:1234@selenoid.autotests.cloud/wd/hub/"
-//      -Dvideo.storage="https://selenoid.autotests.cloud/video/"
-        if (System.getProperty("video.storage") != null) {
+//        gradle clean test -Dremote.web.driver="https://user1:1234@selenoid.autotests.cloud/wd/hub/" \
+//        -Dvideo.storage="https://selenoid.autotests.cloud/video/"
+        if(System.getProperty("video.storage") != null)
             attachVideo();
-        }
-
         closeWebDriver();
     }
 }
